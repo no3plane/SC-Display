@@ -27,7 +27,6 @@ export class Card {
     </li>
   `;
   private _node: HTMLElement;
-  private _superChat: SuperChat;
 
   private _head: HTMLElement;
   private _medal: HTMLElement;
@@ -42,55 +41,67 @@ export class Card {
   private _translation: HTMLElement;
 
   constructor(sc: SuperChat) {
-    this._superChat = sc;
-
     let newElement = document.createElement("div");
     newElement.innerHTML = Card.TEMPLATE;
-    this._node = newElement.firstElementChild as HTMLElement;
+    let node = newElement.firstElementChild as HTMLElement;
 
-    this._head = this._node.querySelector(".head") as HTMLElement;
-    this._medal = this._node.querySelector(".medal") as HTMLElement;
-    this._medalName = this._node.querySelector(".medal-name") as HTMLElement;
-    this._medalLabel = this._node.querySelector(".medal-label") as HTMLElement;
-    this._medalLevel = this._node.querySelector(".medal-level") as HTMLElement;
-    this._username = this._node.querySelector(".username") as HTMLElement;
-    this._price = this._node.querySelector(".price") as HTMLElement;
-    this._body = this._node.querySelector(".body") as HTMLElement;
-    this._expire = this._node.querySelector(".expire") as HTMLElement;
-    this._startTime = this._node.querySelector(".start-time") as HTMLElement;
-    this._translation = this._node.querySelector(".translation") as HTMLElement;
+    this._node = node;
+    this._head = node.querySelector(".head") as HTMLElement;
+    this._medal = node.querySelector(".medal") as HTMLElement;
+    this._medalName = node.querySelector(".medal-name") as HTMLElement;
+    this._medalLabel = node.querySelector(".medal-label") as HTMLElement;
+    this._medalLevel = node.querySelector(".medal-level") as HTMLElement;
+    this._username = node.querySelector(".username") as HTMLElement;
+    this._price = node.querySelector(".price") as HTMLElement;
+    this._body = node.querySelector(".body") as HTMLElement;
+    this._expire = node.querySelector(".expire") as HTMLElement;
+    this._startTime = node.querySelector(".start-time") as HTMLElement;
+    this._translation = node.querySelector(".translation") as HTMLElement;
 
-    this.updateMedal();
-    this.updateUsername();
-    this.updatePrice();
-    this.updateMessage();
-    this.updateStartTime();
-    this.updateExpire();
-    
-    this._node.classList.add('read');
+    this.initNode(sc);
   }
 
-  public updateShadowColor() {
-
-  }
-
-  public updateMedal(
-    medal: {
-      name: string;
-      level: number;
-      borderColor: string;
-      fontColor: string;
-      backgroundColorStart: string;
-      backgroundColorEnd: string;
-    } = {
-      name: this._superChat.medalName,
-      level: this._superChat.medalLevel,
-      borderColor: this._superChat.medalBorderColor,
-      backgroundColorStart: this._superChat.medalBackgroundColorStart,
-      backgroundColorEnd: this._superChat.medalBackgroundColorEnd,
-      fontColor: this._superChat.medalFontColor,
+  public initNode(sc: SuperChat) {
+    this.setMedal({
+      name: sc.medalName,
+      level: sc.medalLevel,
+      borderColor: sc.medalBorderColor,
+      backgroundColorStart: sc.medalBackgroundColorStart,
+      backgroundColorEnd: sc.medalBackgroundColorEnd,
+      fontColor: sc.medalFontColor,
+    });
+    this.setUsername(sc.username, sc.usernameColor);
+    this.setPrice(sc.price);
+    this.setMessage(sc.message, sc.messageTranslation);
+    this.setStartTime(sc.startTime);
+    this.setMainColor(sc.priceColor);
+    if (sc.isExpired()) {
+      // this.expired();
     }
-  ) {
+  }
+
+  public read() {
+    this._node.classList.add("read");
+  }
+
+  public unread() {
+    this._node.classList.remove("read");
+  }
+
+  public setMainColor(color: string) {
+    this._node.style.boxShadow = `0 1px 5px 0 ${color}bf`;
+    this._price.style.color = color;
+    this._head.style.borderBottomColor = color;
+  }
+
+  public setMedal(medal: {
+    name: string;
+    level: number;
+    borderColor: string;
+    fontColor: string;
+    backgroundColorStart: string;
+    backgroundColorEnd: string;
+  }) {
     this._medalName.textContent = medal.name;
     this._medalLevel.textContent = String(medal.level);
     this._medal.style.borderColor = medal.borderColor;
@@ -103,32 +114,21 @@ export class Card {
     this._medalLabel.style.color = medal.fontColor;
   }
 
-  public updateUsername(
-    username: string = this._superChat.username,
-    color: string = this._superChat.usernameColor
-  ) {
+  public setUsername(username: string, color: string) {
     this._username.textContent = username;
     this._username.style.color = color;
   }
 
-  public updatePrice(
-    price: number = this._superChat.price,
-    color: string = this._superChat.priceColor
-  ) {
+  public setPrice(price: number) {
     this._price.textContent = String(price);
-    this._price.style.color = color;
-    this._head.style.borderBottomColor = color;
   }
 
-  public updateMessage(
-    message: string = this._superChat.message,
-    translation: string = this._superChat.messageTranslation
-  ) {
+  public setMessage(message: string, translation: string) {
     this._body.textContent = message;
     this._translation.textContent = translation;
   }
 
-  public updateStartTime(startTime: Date = this._superChat.startTime) {
+  public setStartTime(startTime: Date) {
     const hour = startTime.getHours();
     const second = startTime.getSeconds();
     const minute = startTime.getMinutes();
@@ -140,8 +140,16 @@ export class Card {
       (second < 10 ? "0" + second : second);
   }
 
-  public updateExpire() {
-    this._expire.textContent = this._superChat.isExpired() ? "已过期" : "";
+  /**
+   * 破环性操作
+   */
+  public expired() {
+    this._expire.textContent = "已过期";
+    this._node.style.boxShadow = "";
+    this._username.style.color = "";
+    this._price.style.color = "";
+    this._head.style.borderBottomColor = "";
+    this._node.classList.add("expired");
   }
 
   public getHTMLElement() {

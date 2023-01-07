@@ -11,3 +11,8 @@ const card2 = new Card(new SuperChat(sc2));
 list.appendChild(card2.getHTMLElement());
 const card3 = new Card(new SuperChat(sc3));
 list.appendChild(card3.getHTMLElement());
+
+card1.read();
+card2.read();
+card2.unread();
+card3.expired();
