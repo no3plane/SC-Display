@@ -1,6 +1,6 @@
-import { superChatData } from "./message";
+import { RawSuperChat } from "./SuperChat";
 
-export const sc1: superChatData = {
+export const sc1: RawSuperChat = {
   background_bottom_color: "#E2B52B",
   background_color: "#FFF1C5",
   background_color_end: "#EEBE5C",
@@ -11,7 +11,7 @@ export const sc1: superChatData = {
   background_price_color: "#ECCF75",
   color_point: 0.7,
   dmscore: 120,
-  end_time: 1667052432,
+  end_time: 1673213366,
   gift: {
     gift_id: 12000,
     gift_name: "醒目留言",
@@ -63,7 +63,8 @@ export const sc1: superChatData = {
     user_level: 11,
   },
 };
-export const sc2: superChatData = {
+
+export const sc2: RawSuperChat = {
   background_bottom_color: "#2A60B2",
   background_color: "#EDF5FF",
   background_color_end: "#405D85",
@@ -74,7 +75,7 @@ export const sc2: superChatData = {
   background_price_color: "#7497CD",
   color_point: 0.7,
   dmscore: 72,
-  end_time: 1672934487,
+  end_time: 1673213566,
   gift: {
     gift_id: 12000,
     gift_name: "醒目留言",
@@ -125,7 +126,7 @@ export const sc2: superChatData = {
   },
 };
 
-export const sc3 = {
+export const sc3: RawSuperChat = {
   background_bottom_color: "#2A60B2",
   background_color: "#EDF5FF",
   background_color_end: "#405D85",
@@ -136,7 +137,7 @@ export const sc3 = {
   background_price_color: "#7497CD",
   color_point: 0.7,
   dmscore: 80,
-  end_time: 1667053166,
+  end_time: 1673213366,
   gift: {
     gift_id: 12000,
     gift_name: "醒目留言",
@@ -184,5 +185,67 @@ export const sc3 = {
     title: "0",
     uname: "永不失联的阿绫",
     user_level: 10,
+  },
+};
+
+export const sc4: RawSuperChat = {
+  background_bottom_color: "#2A60B2",
+  background_color: "#EDF5FF",
+  background_color_end: "#405D85",
+  background_color_start: "#3171D2",
+  background_icon: "",
+  background_image:
+    "https://i0.hdslb.com/bfs/live/a712efa5c6ebc67bafbe8352d3e74b820a00c13e.png",
+  background_price_color: "#7497CD",
+  color_point: 0.7,
+  dmscore: 80,
+  end_time: 1673211060,
+  gift: {
+    gift_id: 12000,
+    gift_name: "醒目留言",
+    num: 1,
+  },
+  id: 6001238,
+  is_ranked: 1,
+  is_send_audit: 0,
+  medal_info: {
+    anchor_roomid: 21195828,
+    anchor_uname: "拜托了Hooxi君",
+    guard_level: 0,
+    icon_id: 0,
+    is_lighted: 1,
+    medal_color: "#8d7ca6",
+    medal_color_border: 9272486,
+    medal_color_end: 9272486,
+    medal_color_start: 9272486,
+    medal_level: 11,
+    medal_name: "爱讨论",
+    special: "",
+    target_id: 271887040,
+  },
+  message: "姐妹 推荐看下法娜Fyna的直播 她很不错的",
+  message_font_color: "#A3F6FF",
+  message_trans: "",
+  price: 30,
+  rate: 1000,
+  start_time: 1673207111,
+  time: 60,
+  token: "300545B7",
+  trans_mark: 0,
+  ts: 1673207111,
+  uid: 1969131881,
+  user_info: {
+    face: "https://i2.hdslb.com/bfs/face/c8c594f16de59fce1210b4e1d00c63db30022f7a.jpg",
+    face_frame: "",
+    guard_level: 0,
+    is_main_vip: 1,
+    is_svip: 0,
+    is_vip: 0,
+    level_color: "#969696",
+    manager: 0,
+    name_color: "#666666",
+    title: "0",
+    uname: "如果你打了个喷嚏阿秋",
+    user_level: 6,
   },
 };

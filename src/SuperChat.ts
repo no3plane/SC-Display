@@ -1,4 +1,4 @@
-const enum Vip {
+export const enum GuardLevel {
   None = 0, // 普通
   Captain = 3, // 舰长
   Admiral = 2, // 提督
@@ -7,12 +7,17 @@ const enum Vip {
 
 export class SuperChat {
   /* 原本就有的字段 */
-  medalName: string;
-  medalLevel: number;
-  medalBorderColor: string;
-  medalBackgroundColorStart: string;
-  medalBackgroundColorEnd: string;
-  medalFontColor: string;
+  id: number;
+
+  medal: {
+    name: string;
+    level: number;
+    borderColor: string;
+    backgroundColorStart: string;
+    backgroundColorEnd: string;
+    fontColor: string;
+    guardLevel: GuardLevel;
+  } | null;
 
   username: string;
   usernameColor: string;
@@ -25,34 +30,40 @@ export class SuperChat {
 
   startTime: Date;
   endTime: Date;
+  duration: number;
 
+  roomGuardLevel: GuardLevel;
   /* 额外添加的字段 */
   read: boolean;
-  vip: Vip;
 
   constructor(rawSc: RawSuperChat) {
-    this.medalName = rawSc.medal_info.medal_name;
-    this.medalLevel = rawSc.medal_info.medal_level;
-    this.medalBorderColor =
-      "#" + rawSc.medal_info.medal_color_border.toString(16);
-    this.medalBackgroundColorStart =
-      "#" + rawSc.medal_info.medal_color_start.toString(16);
-    this.medalBackgroundColorEnd =
-      "#" + rawSc.medal_info.medal_color_end.toString(16);
-    this.medalFontColor = `#${rawSc.medal_info.medal_color}`;
+    if (rawSc.medal_info) {
+      this.medal = {
+        name: rawSc.medal_info.medal_name,
+        level: rawSc.medal_info.medal_level,
+        borderColor: "#" + rawSc.medal_info.medal_color_border.toString(16),
+        backgroundColorStart:
+          "#" + rawSc.medal_info.medal_color_start.toString(16),
+        backgroundColorEnd: "#" + rawSc.medal_info.medal_color_end.toString(16),
+        fontColor: `#${rawSc.medal_info.medal_color}`,
+        guardLevel: rawSc.medal_info.guard_level,
+      };
+    } else {
+      this.medal = null;
+    }
+
+    this.id = rawSc.id;
     this.username = rawSc.user_info.uname;
     this.usernameColor = rawSc.user_info.name_color;
     this.price = rawSc.price;
     this.priceColor = rawSc.background_price_color;
     this.message = rawSc.message;
     this.messageTranslation = rawSc.message_trans;
-    this.startTime = new Date(rawSc.start_time);
-    this.endTime = new Date(rawSc.end_time);
-    this.vip = rawSc.user_info.guard_level; // TODO 这里有两个guard_level，分析一下他们的区别
-  }
-
-  public isExpired(): boolean {
-    return new Date() > this.endTime;
+    this.startTime = new Date(rawSc.start_time * 1000);
+    this.endTime = new Date(rawSc.end_time * 1000);
+    this.duration = rawSc.time;
+    this.roomGuardLevel = rawSc.user_info.guard_level;
+    this.read = false;
   }
 }
 
@@ -84,7 +95,7 @@ export interface RawSuperChat {
   medal_info: {
     anchor_roomid: number; // 25512443,
     anchor_uname: string; // "露早GOGO",
-    guard_level: number; // 3,
+    guard_level: number; // 用户是粉丝牌对应主播的什么身份
     icon_id: number; // 0,
     is_lighted: number; // 1,
     medal_color: string; // "#1a544b",
@@ -95,7 +106,7 @@ export interface RawSuperChat {
     medal_name: string; // "GOGO队",
     special: string; // "",
     target_id: number; // 1669777785
-  };
+  } | null;
   message: string; // "你是狡黠，是纯真，是我们的精灵，人间的美好。你说，遇到我们，你很开心。但遇到你，更是我们的幸运。亲爱的露早，你是最棒的！",
   message_font_color: string; // "#72110E",
   message_trans: string; // "",
@@ -110,7 +121,7 @@ export interface RawSuperChat {
   user_info: {
     face: string; // "https://i1.hdslb.com/bfs/face/ef32438dc638e96b291237331998900d9dba8cfc.jpg",
     face_frame: string; // "https://i0.hdslb.com/bfs/live/80f732943cc3367029df65e267960d56736a82ee.png",
-    guard_level: number; // 3,
+    guard_level: number; // 用户是当前主播的什么身份
     is_main_vip: number; // 0,
     is_svip: number; // 0,
     is_vip: number; // 0,
@@ -118,7 +129,7 @@ export interface RawSuperChat {
     manager: number; // 0,
     name_color: string; // "#00D1F1",
     title: string; // "0",
-    uname: string; // "顽猴捞月",
-    user_level: number; // 11
+    uname: string; // 用户名
+    user_level: number; // 可能是B站等级
   };
 }

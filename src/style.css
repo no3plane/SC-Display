@@ -23,6 +23,9 @@
   font-size: 12px;
   height: 16px;
   line-height: 16px;
+}
+
+.medal-left-margin {
   margin-left: 7px;
 }
 
@@ -46,7 +49,19 @@
   height: 26px;
   margin-left: -12px;
   margin-right: -4px;
-  background-image: url(./icon.webp); /* TODO */
+  background-image: url(./icon.webp);
+}
+
+.medal-icon-captain {
+  background-image: url(./icon.webp);
+}
+
+.medal-icon-admiral {
+  background-image: url(./icon.webp);
+}
+
+.medal-icon-viceroy {
+  background-image: url(./icon.webp);
 }
 
 .medal-level {
@@ -64,6 +79,9 @@
 .username {
   flex: 1;
   margin: 0 8px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .body {
