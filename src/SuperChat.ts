@@ -17,10 +17,13 @@ export class SuperChat {
     backgroundColorEnd: string;
     fontColor: string;
     guardLevel: GuardLevel;
+    upUid: number;
+    upName: string;
   } | null;
 
   username: string;
   usernameColor: string;
+  userId: number;
 
   price: number;
   priceColor: string;
@@ -47,6 +50,8 @@ export class SuperChat {
         backgroundColorEnd: "#" + rawSc.medal_info.medal_color_end.toString(16),
         fontColor: `#${rawSc.medal_info.medal_color}`,
         guardLevel: rawSc.medal_info.guard_level,
+        upUid: rawSc.medal_info.target_id,
+        upName: rawSc.medal_info.anchor_uname,
       };
     } else {
       this.medal = null;
@@ -55,6 +60,7 @@ export class SuperChat {
     this.id = rawSc.id;
     this.username = rawSc.user_info.uname;
     this.usernameColor = rawSc.user_info.name_color;
+    this.userId = rawSc.uid;
     this.price = rawSc.price;
     this.priceColor = rawSc.background_price_color;
     this.message = rawSc.message;
@@ -68,10 +74,12 @@ export class SuperChat {
 }
 
 export interface RawMessage {
-  cmd: "SUPER_CHAT_MESSAGE"; // "SUPER_CHAT_MESSAGE",
+  cmd: MessageType;
   data: RawSuperChat;
-  roomid: number; // 25512443
+  roomid: number;
 }
+
+export type MessageType = "SUPER_CHAT_MESSAGE" | "DANMU_MSG" | "SEND_GIFT";
 
 export interface RawSuperChat {
   background_bottom_color: string; // 下方颜色比较深的，写着SC内容的区域
@@ -83,18 +91,18 @@ export interface RawSuperChat {
   background_price_color: string; // "#ECCF75",
   color_point: number; // 0.7,
   dmscore: number; // 120,
-  end_time: number; // 1667052432,
+  end_time: number; // 时间/1000
   gift: {
     gift_id: number; // 12000,
     gift_name: string; // "醒目留言",
     num: number; // 1
   };
-  id: number; // 5435571,
+  id: number; // 应该是SC的ID
   is_ranked: number; // 0,
   is_send_audit: number; // 0,
   medal_info: {
-    anchor_roomid: number; // 25512443,
-    anchor_uname: string; // "露早GOGO",
+    anchor_roomid: number; // 直播间房间号
+    anchor_uname: string; // 主播名
     guard_level: number; // 用户是粉丝牌对应主播的什么身份
     icon_id: number; // 0,
     is_lighted: number; // 1,
@@ -102,25 +110,25 @@ export interface RawSuperChat {
     medal_color_border: number; // 6809855,
     medal_color_end: number; // 5414290,
     medal_color_start: number; // 1725515,
-    medal_level: number; // 22,
-    medal_name: string; // "GOGO队",
+    medal_level: number; // 粉丝牌等级
+    medal_name: string; // 粉丝群体的名字
     special: string; // "",
-    target_id: number; // 1669777785
+    target_id: number; // 主播B站主页ID
   } | null;
-  message: string; // "你是狡黠，是纯真，是我们的精灵，人间的美好。你说，遇到我们，你很开心。但遇到你，更是我们的幸运。亲爱的露早，你是最棒的！",
+  message: string; // SC内容
   message_font_color: string; // "#72110E",
-  message_trans: string; // "",
-  price: number; // 100,
+  message_trans: string; // SC内容翻译
+  price: number; // SC价格
   rate: number; // 1000,
-  start_time: number; // 1667052132,
-  time: number; // 300,
+  start_time: number; // 时间/1000
+  time: number; // SC持续时间
   token: string; // "8156D664",
   trans_mark: number; // 0,
   ts: number; // 1667052132,
-  uid: number; // 343292134,
+  uid: number; // 用户B站主页ID
   user_info: {
-    face: string; // "https://i1.hdslb.com/bfs/face/ef32438dc638e96b291237331998900d9dba8cfc.jpg",
-    face_frame: string; // "https://i0.hdslb.com/bfs/live/80f732943cc3367029df65e267960d56736a82ee.png",
+    face: string; // 用户头像URL
+    face_frame: string; // 用户头像框URL
     guard_level: number; // 用户是当前主播的什么身份
     is_main_vip: number; // 0,
     is_svip: number; // 0,

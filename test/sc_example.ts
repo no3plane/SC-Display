@@ -1,4 +1,4 @@
-import { RawSuperChat } from "./SuperChat";
+import { RawSuperChat } from "../src/SuperChat";
 
 export const sc1: RawSuperChat = {
   background_bottom_color: "#E2B52B",
@@ -75,7 +75,7 @@ export const sc2: RawSuperChat = {
   background_price_color: "#7497CD",
   color_point: 0.7,
   dmscore: 72,
-  end_time: 1673213566,
+  end_time: Math.floor(+new Date() / 1000) + 180,
   gift: {
     gift_id: 12000,
     gift_name: "醒目留言",
@@ -137,7 +137,7 @@ export const sc3: RawSuperChat = {
   background_price_color: "#7497CD",
   color_point: 0.7,
   dmscore: 80,
-  end_time: 1673213366,
+  end_time: Math.floor(+new Date() / 1000) + 20,
   gift: {
     gift_id: 12000,
     gift_name: "醒目留言",
